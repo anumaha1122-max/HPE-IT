@@ -310,6 +310,8 @@ HPE IT Solutions Team`,
                               ? 'bg-hpe-navy/50 border-white/10 text-white placeholder:text-slate-700 focus:border-hpe-cyan focus:bg-hpe-navy/80'
                               : 'bg-slate-50 border-slate-200 text-hpe-navy placeholder:text-slate-400 focus:border-hpe-cyan focus:bg-white'}`}
                           placeholder="Enter your name"
+                          pattern="(?=.*[a-zA-Z]{3,})[a-zA-Z .]+"
+                          title="Name must contain at least 3 letters and can include spaces and periods."
                         />
                       </div>
                       <div className="space-y-3">
@@ -325,6 +327,8 @@ HPE IT Solutions Team`,
                               ? 'bg-hpe-navy/50 border-white/10 text-white placeholder:text-slate-700 focus:border-hpe-cyan focus:bg-hpe-navy/80'
                               : 'bg-slate-50 border-slate-200 text-hpe-navy placeholder:text-slate-400 focus:border-hpe-cyan focus:bg-white'}`}
                           placeholder="Enter your email"
+                          pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9]+(?:.[a-zA-Z0-9]+).[a-zA-Z]{2,}$"
+                          title="Please enter a valid email address"
                         />
                       </div>
                       <div className="space-y-3">
@@ -340,6 +344,8 @@ HPE IT Solutions Team`,
                               ? 'bg-hpe-navy/50 border-white/10 text-white placeholder:text-slate-700 focus:border-hpe-cyan focus:bg-hpe-navy/80'
                               : 'bg-slate-50 border-slate-200 text-hpe-navy placeholder:text-slate-400 focus:border-hpe-cyan focus:bg-white'}`}
                           placeholder="Enter your phone number"
+                          pattern="[6-9][0-9]{9}"
+                          title="Please enter a valid phone number"
                         />
                       </div>
                       <div className="space-y-3">
