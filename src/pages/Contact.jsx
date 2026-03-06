@@ -183,7 +183,15 @@ export default function Contact() {
           {
             to_email: form.email,
             to_name: form.name,
-            subject: "HPE IT SOLUTIONS | Response to Your Inquiry",
+            name: form.name,
+            time: new Date().toLocaleString("en-IN", {
+              day: "2-digit",
+              month: "short",
+              year: "numeric",
+              hour: "2-digit",
+              minute: "2-digit",
+              hour12: true,
+            }),
             message: `Hello ${form.name},
 
 Thank you for reaching out to HPE IT Solutions.
@@ -196,7 +204,8 @@ If you require further information, please reply to this email.
 
 Best Regards,
 HPE IT Solutions Team`,
-          }
+          },
+          import.meta.env.VITE_EMAIL_PUBLIC_KEY
         );
 
         setSubmissionId(generateId());
@@ -204,7 +213,12 @@ HPE IT Solutions Team`,
       }
     } catch (err) {
       console.error("Submission error:", err);
-      const errorMessage = err.response?.data?.error || "Failed to send transmission. Please try again.";
+      let errorMessage = "Failed to send transmission. Please try again.";
+      if (err.response?.status === 409) {
+        errorMessage = "This inquiry has already been submitted. Our team will contact you soon.";
+      } else if (err.response?.data?.error) {
+        errorMessage = err.response.data.error;
+      }
       setError(errorMessage);
     } finally {
       setSubmitting(false);

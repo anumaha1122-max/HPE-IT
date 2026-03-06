@@ -113,7 +113,15 @@ function DetailModal({ sub, onClose, onStatusChange, onDelete }) {
                 {
                     to_email: sub.email,
                     to_name: sub.name,
-                    subject: "HPE IT SOLUTIONS | Response to Your Inquiry",
+                    name: "HPE IT Solutions Team",
+                    time: new Date().toLocaleString("en-IN", {
+                        day: "2-digit",
+                        month: "short",
+                        year: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        hour12: true,
+                    }),
                     message: `Hello ${sub.name},
 
 Thank you for reaching out to HPE IT Solutions.
@@ -125,7 +133,8 @@ If you require further information, please reply to this email.
 
 Best Regards,
 HPE IT Solutions Team`,
-                }
+                },
+                import.meta.env.VITE_EMAIL_PUBLIC_KEY
             );
 
             console.log("Email sent successfully:", response.status, response.text);
