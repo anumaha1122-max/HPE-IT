@@ -176,23 +176,24 @@ export default function Contact() {
       });
 
       if (response.status === 200) {
-        // Automatically send response message to form.email
-        await emailjs.send(
-          import.meta.env.VITE_EMAIL_SERVICE_ID,
-          import.meta.env.VITE_EMAIL_TEMPLATE_ID,
-          {
-            to_email: form.email,
-            to_name: form.name,
-            name: form.name,
-            time: new Date().toLocaleString("en-IN", {
-              day: "2-digit",
-              month: "short",
-              year: "numeric",
-              hour: "2-digit",
-              minute: "2-digit",
-              hour12: true,
-            }),
-            message: `Hello ${form.name},
+        // Automatically send response message to form.email (Non-blocking)
+        try {
+          await emailjs.send(
+            import.meta.env.VITE_EMAIL_SERVICE_ID,
+            import.meta.env.VITE_EMAIL_TEMPLATE_ID,
+            {
+              to_email: form.email,
+              to_name: form.name,
+              name: form.name,
+              time: new Date().toLocaleString("en-IN", {
+                day: "2-digit",
+                month: "short",
+                year: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: true,
+              }),
+              message: `Hello ${form.name},
 
 Thank you for reaching out to HPE IT Solutions.
 Our team has reviewed your message and provided the response below:
@@ -204,9 +205,13 @@ If you require further information, please reply to this email.
 
 Best Regards,
 HPE IT Solutions Team`,
-          },
-          import.meta.env.VITE_EMAIL_PUBLIC_KEY
-        );
+            },
+            import.meta.env.VITE_EMAIL_PUBLIC_KEY
+          );
+        } catch (emailErr) {
+          console.error("Auto-reply email failed to send (Handled):", emailErr);
+          // We don't throw here so the UI still shows success for the DB save
+        }
 
         setSubmissionId(generateId());
         setSubmitted(true);
