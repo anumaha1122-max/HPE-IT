@@ -157,8 +157,33 @@ export default function Contact() {
   const [submitted, setSubmitted] = useState(false);
   const [submissionId, setSubmissionId] = useState("");
 
-  const handleChange = (e) => setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    let filteredValue = value;
 
+    if (name === "name") {
+      // Only allow letters, spaces, and dots as per pattern [a-zA-Z .]
+      filteredValue = value.replace(/[^a-zA-Z .]/g, "");
+    } else if (name === "phone") {
+      // Only allow digits, max 10 chars, and must start with 6-9 as per pattern [6-9][0-9]{9}
+      const digits = value.replace(/\D/g, "");
+      if (digits.length > 0) {
+        if (/[6-9]/.test(digits[0])) {
+          filteredValue = digits.slice(0, 10);
+        } else {
+          // Ignore invalid start digit and keep previous value
+          filteredValue = form[name] || "";
+        }
+      } else {
+        filteredValue = "";
+      }
+    } else if (name === "email") {
+      // Basic filtering for email-safe characters as per standard patterns
+      filteredValue = value.replace(/[^a-zA-Z0-9._%+-@]/g, "");
+    }
+
+    setForm((prev) => ({ ...prev, [name]: filteredValue }));
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!form.name || !form.email || !form.phone || !form.subject || !form.message) return;
@@ -338,13 +363,13 @@ HPE IT Solutions Team`,
                           name="phone"
                           value={form.phone}
                           onChange={handleChange}
-                          required
                           className={`w-full p-4 rounded-xl border transition-all font-semibold focus:outline-none focus:ring-1 focus:ring-hpe-cyan/30
                             ${isDark
                               ? 'bg-hpe-navy/50 border-white/10 text-white placeholder:text-slate-700 focus:border-hpe-cyan focus:bg-hpe-navy/80'
                               : 'bg-slate-50 border-slate-200 text-hpe-navy placeholder:text-slate-400 focus:border-hpe-cyan focus:bg-white'}`}
                           placeholder="Enter your phone number"
                           pattern="[6-9][0-9]{9}"
+                          required
                           title="Please enter a valid phone number"
                         />
                       </div>
